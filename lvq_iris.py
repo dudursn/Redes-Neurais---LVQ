@@ -62,13 +62,15 @@ def treino(classes, baseTreino, numPrototipos, taxaDeAprendizagem):
 	novaTaxaDeApendizagem = taxaDeAprendizagem
 
 	iteracoes = len(baseTreino)
-	while(novaTaxaDeApendizagem>0):
+	k = 0
+	while(novaTaxaDeApendizagem>0.1):
 		for i in range(iteracoes):
 			entradaTreino = baseTreino[i]
 			melhorPrototipo = pegar_unidade_de_melhor_correspondencia(prototipos, entradaTreino)
 			novaTaxaDeApendizagem = taxaDeAprendizagem*(1.0 - (i/iteracoes))
 			atualiza_prototipo(melhorPrototipo, entradaTreino, novaTaxaDeApendizagem)
-			print("Iteracao", i,":",novaTaxaDeApendizagem)
+			print("Iteracao", k,":",novaTaxaDeApendizagem)
+			k+=1
 		
 		#print(" Classe do Melhor Prototipo:", melhorPrototipo['classe'], ", Classe da Entrada:",entradaTreino['classe'])
 	return prototipos
