@@ -27,7 +27,7 @@ def dist_euclidiana(vetor1, vetor2):
 
 #Cria os codebooks vectors ou protótipos
 def inicializa_prototipos(classes, numPrototipos):
-	prototipos = []
+	dicionario = []
 	#Os dados foram normalizados entre 0 e 1
 	dominioDosAtributos = [[0,1] for x in range(4)]
 	for i in range(numPrototipos):
@@ -35,13 +35,13 @@ def inicializa_prototipos(classes, numPrototipos):
 		classeSelecionada = choice(classes)
 		prototipo['classe'] = classeSelecionada
 		prototipo['vetor'] = vetor_aleatorio(dominioDosAtributos)
-		prototipos.append(prototipo)
-	return prototipos
+		dicionario.append(prototipo)
+	return dicionario
 
 #Faz o ranqueamento do melhor prototipo ou codebook
-def pegar_unidade_de_melhor_correspondencia(prototipos, entrada):
+def pegar_unidade_de_melhor_correspondencia(dicionario, entrada):
 	ranqueamento = []
-	for prototipo in prototipos:
+	for prototipo in dicionario:
 		distancia = dist_euclidiana(entrada['vetor'], prototipo['vetor'])
 		ranqueamento.append((distancia, prototipo))
 	melhorPrototipo = sorted(ranqueamento)[0][1]
@@ -58,7 +58,7 @@ def atualiza_prototipo(melhorPrototipo, entrada, novaTaxaDeApendizagem):
 			melhorPrototipo['vetor'][i] -= novaTaxaDeApendizagem * erro
 
 def treino(classes, baseTreino, numPrototipos, taxaDeAprendizagem):
-	prototipos = inicializa_prototipos(classes, numPrototipos)
+	dicionario = inicializa_prototipos(classes, numPrototipos)
 	novaTaxaDeApendizagem = taxaDeAprendizagem
 
 	iteracoes = len(baseTreino)
@@ -66,14 +66,14 @@ def treino(classes, baseTreino, numPrototipos, taxaDeAprendizagem):
 	while(novaTaxaDeApendizagem>0.1):
 		for i in range(iteracoes):
 			entradaTreino = baseTreino[i]
-			melhorPrototipo = pegar_unidade_de_melhor_correspondencia(prototipos, entradaTreino)
+			melhorPrototipo = pegar_unidade_de_melhor_correspondencia(dicionario, entradaTreino)
 			novaTaxaDeApendizagem = taxaDeAprendizagem*(1.0 - (i/iteracoes))
 			atualiza_prototipo(melhorPrototipo, entradaTreino, novaTaxaDeApendizagem)
 			print("Iteracao", k,":",novaTaxaDeApendizagem)
 			k+=1
 		
 		#print(" Classe do Melhor Prototipo:", melhorPrototipo['classe'], ", Classe da Entrada:",entradaTreino['classe'])
-	return prototipos
+	return dicionario
 
 def teste(prototipos, baseTeste):
 	corretos = 0 
@@ -91,12 +91,12 @@ def teste(prototipos, baseTeste):
 if __name__ == '__main__':
 	# Dados
 	baseTreino, baseTeste = dados.pegar_dados() 
-	classes = [0,1,2]
+	classes = ['setosa','versicolor','virginica']
 	# Parametros do algoritmo
 	taxaDeAprendizagem = 0.3
-	numPrototipos = 25
+	numPrototipos = 10
 	#Executar o algoritmo
-	prototipos = treino(classes ,baseTreino, numPrototipos, taxaDeAprendizagem)
-	teste(prototipos, baseTeste)
-	imprimePrototipos(prototipos)
+	dicionario = treino(classes ,baseTreino, numPrototipos, taxaDeAprendizagem)
+	teste(dicionario, baseTeste)
+	imprimePrototipos(dicionario)
 	

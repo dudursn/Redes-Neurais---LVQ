@@ -15,15 +15,22 @@ def pegar_dados():
 	baseTreino = []
 	for i in range(len(Y)):
 		instancia = {}
-		instancia['classe'] = int(Y[i])
+		instancia['classe'] = define_rotulo(int(Y[i]))
 		instancia['vetor'] = X[i]
 		baseTreino.append(instancia) 
 	baseTeste = []
 	for i in range(len(Y_teste)):
 		instancia = {}
-		instancia['classe'] = int(Y_teste[i])
+		instancia['classe'] = define_rotulo(int(Y_teste[i]))
 		instancia['vetor'] = X_teste[i]
 		baseTeste.append(instancia)
 
 	return baseTreino, baseTeste
 
+def define_rotulo(classe):
+	if classe==1:
+		return 'setosa'
+	elif classe==2:
+		return 'versicolor'
+	else:
+		return 'virginica'
